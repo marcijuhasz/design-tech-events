@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Design × Tech Events</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div id="page" class="page">
+      <div class="main-col">
+        <header class="masthead">
+          <div class="wordmark">Design <span>×</span> Tech Events</div>
+          <form id="location-form" class="headline" autocomplete="off">
+            <label for="location-input">What's on near</label>
+            <div class="location-field">
+              <input id="location-input" name="location" type="text" spellcheck="false" />
+              <button type="submit" class="btn btn-primary">Gather events</button>
+            </div>
+          </form>
+          <p id="status" class="status" aria-live="polite"></p>
+        </header>
+
+        <section class="toolbar" aria-label="Filters">
+          <div class="segmented" role="radiogroup" aria-label="Category" id="category-filter">
+            <button type="button" role="radio" data-value="all" aria-checked="true">All</button>
+            <button type="button" role="radio" data-value="design" aria-checked="false">Design</button>
+            <button type="button" role="radio" data-value="tech" aria-checked="false">Tech</button>
+          </div>
+
+          <input id="search" class="search" type="search" placeholder="Search titles, venues, hosts…" />
+
+          <select id="window-filter" aria-label="Date range">
+            <option value="7">Next 7 days</option>
+            <option value="14">Next 2 weeks</option>
+            <option value="31" selected>Next month</option>
+            <option value="92">Next 3 months</option>
+            <option value="0">Any time</option>
+          </select>
+
+          <select id="radius-filter" aria-label="Distance">
+            <option value="5">Within 5 km</option>
+            <option value="10">Within 10 km</option>
+            <option value="25" selected>Within 25 km</option>
+            <option value="50">Within 50 km</option>
+            <option value="0">Any distance</option>
+          </select>
+
+          <div class="chips" id="source-filter" aria-label="Sources"></div>
+
+          <label class="toggle"><input type="checkbox" id="online-filter" /> Include online</label>
+          <label class="toggle" title="Also show nearby events the keyword filter didn't tag as design or tech">
+            <input type="checkbox" id="everything-filter" /> Show untagged
+          </label>
+        </section>
+
+        <main id="list" class="list"></main>
+      </div>
+
+      <aside id="picks" class="picks" aria-labelledby="picks-title" hidden>
+        <div class="picks-head">
+          <h2 id="picks-title">Your picks <span id="picks-count" class="count"></span></h2>
+          <button type="button" class="icon-btn picks-toggle" id="picks-toggle" aria-expanded="false"
+            aria-controls="picks-body" aria-label="Show picks">▴</button>
+        </div>
+        <div id="picks-body" class="picks-body">
+          <div class="picks-actions">
+            <button type="button" class="btn btn-sm" id="copy-links">Copy all links</button>
+            <button type="button" class="btn btn-sm" id="clear-picks">Clear</button>
+          </div>
+          <ol id="picks-list" class="picks-list"></ol>
+        </div>
+      </aside>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <template id="calendar-menu-template">
+      <div class="menu" role="menu">
+        <a role="menuitem" data-cal="google" target="_blank" rel="noopener">Google Calendar</a>
+        <a role="menuitem" data-cal="outlook" target="_blank" rel="noopener">Outlook.com</a>
+        <a role="menuitem" data-cal="office" target="_blank" rel="noopener">Outlook (Microsoft 365)</a>
+        <button type="button" role="menuitem" data-cal="ics">Apple / other (.ics)</button>
+      </div>
+    </template>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

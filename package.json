@@ -1,0 +1,14 @@
+{
+  "name": "design-tech-events",
+  "version": "1.0.0",
+  "description": "Gathers design & tech events near any address and adds them to Google or Outlook calendar.",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  }
+}
