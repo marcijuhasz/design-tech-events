@@ -16,7 +16,7 @@ Then open http://localhost:4321.
 
 - Type any address or city in the headline (“Vienna”, “Andrássy út 1, Budapest”, “Berlin Mitte”) and press **Gather events**.
   The app remembers your last location.
-- Filter by **Design / Tech**, date range, distance, source, online vs in-person, or search text.
+- Filter by **Design / Tech**, date range, distance, online vs in-person, or search text.
 - **+ Pick** adds an event to the **Your picks** pane, which appears on the right once you've picked something
   (on a phone it's a sheet at the bottom; tap it to open). Picks are saved in your browser and sorted by date, with past events at the bottom.
 - In the pane, every pick has **Open event ↗** (the event's page) and **Add to calendar ▾**, which opens a prefilled event in
@@ -40,5 +40,5 @@ location used when none is given.
 
 The sources are public web pages and feeds, not official APIs, so one of them can break if the site changes.
 When that happens the app keeps working with the others and shows which source couldn't be reached.
-Events the classifier doesn't tag as design or tech are hidden; turn on **Show untagged** to see everything nearby.
+Events the classifier doesn't tag as design or tech are hidden.
 To tune what counts as design or tech, edit the keyword lists in `lib/classify.js`.

@@ -35,7 +35,17 @@
             <button type="button" role="radio" data-value="tech" aria-checked="false">Tech</button>
           </div>
 
-          <input id="search" class="search" type="search" placeholder="Search titles, venues, hosts…" />
+          <div class="search-field">
+            <svg class="search-icon" viewBox="0 0 16 16" aria-hidden="true">
+              <circle cx="7" cy="7" r="4.5" />
+              <path d="m10.5 10.5 3 3" />
+            </svg>
+            <input id="search" class="search" type="search" placeholder="Search titles, venues, hosts…"
+              aria-label="Search events" />
+            <button type="button" class="search-clear" id="search-clear" aria-label="Clear search" hidden>
+              <svg viewBox="0 0 12 12" aria-hidden="true"><path d="m3.5 3.5 5 5m0-5-5 5" /></svg>
+            </button>
+          </div>
 
           <select id="window-filter" aria-label="Date range">
             <option value="7">Next 7 days</option>
@@ -53,12 +63,7 @@
             <option value="0">Any distance</option>
           </select>
 
-          <div class="chips" id="source-filter" aria-label="Sources"></div>
-
           <label class="toggle"><input type="checkbox" id="online-filter" /> Include online</label>
-          <label class="toggle" title="Also show nearby events the keyword filter didn't tag as design or tech">
-            <input type="checkbox" id="everything-filter" /> Show untagged
-          </label>
         </section>
 
         <main id="list" class="list"></main>

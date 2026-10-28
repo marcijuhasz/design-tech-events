@@ -34,8 +34,6 @@ const state = {
     windowDays: savedFilters.windowDays ?? 31,
     radiusKm: savedFilters.radiusKm ?? 25,
     online: savedFilters.online ?? false,
-    everything: savedFilters.everything ?? false,
-    sources: new Set(savedFilters.sources ?? Object.keys(SOURCE_LABELS)),
     query: '',
   },
   picks: new Map(
@@ -57,9 +55,7 @@ const els = {
   search: $('#search'),
   window: $('#window-filter'),
   radius: $('#radius-filter'),
-  sources: $('#source-filter'),
   online: $('#online-filter'),
-  everything: $('#everything-filter'),
   picks: $('#picks'),
   picksHead: $('.picks-head'),
   picksCount: $('#picks-count'),
@@ -99,14 +95,13 @@ async function load({ refresh = false } = {}) {
 }
 
 function persistFilters() {
-  const { query, sources, ...rest } = state.filters;
-  store.set('filters', { ...rest, sources: [...sources] });
+  const { query, ...rest } = state.filters;
+  store.set('filters', rest);
 }
 
-function matches(e, { ignoreSource = false } = {}) {
+function matches(e) {
   const f = state.filters;
-  if (!ignoreSource && !f.sources.has(e.source) && !e.alsoOn.some((a) => f.sources.has(a.source))) return false;
-  if (!f.everything && e.categories.length === 0) return false;
+  if (e.categories.length === 0) return false;
   if (f.category !== 'all' && !e.categories.includes(f.category)) return false;
   if (!f.online && e.online && !e.hybrid) return false;
   if (f.radiusKm && e.distanceKm != null && e.distanceKm > f.radiusKm) return false;
@@ -128,14 +123,13 @@ function render() {
   if (!state.data) return;
   const { events } = state.data;
   const visible = events.filter((e) => matches(e));
-  renderSourceChips(events);
   renderStatus(visible.length);
 
   if (!visible.length) {
     els.list.innerHTML = `
       <div class="empty-state">
         <h3>Nothing matches</h3>
-        <p>Try a wider date range or distance, include online events, or turn on “Show untagged”.</p>
+        <p>Try a wider date range or distance, or include online events.</p>
       </div>`;
     return;
   }
@@ -199,22 +193,6 @@ function cardHtml(e) {
           : `<div class="thumb empty" aria-hidden="true">${escapeHtml(e.title.trim()[0] || '•')}</div>`
       }
     </article>`;
-}
-
-function renderSourceChips(events) {
-  const counts = Object.fromEntries(Object.keys(SOURCE_LABELS).map((s) => [s, 0]));
-  for (const e of events) {
-    if (!matches(e, { ignoreSource: true })) continue;
-    for (const s of new Set([e.source, ...e.alsoOn.map((a) => a.source)])) counts[s]++;
-  }
-  els.sources.innerHTML = Object.entries(SOURCE_LABELS)
-    .map(([key, label]) => {
-      const failed = state.data.sources[key] && !state.data.sources[key].ok;
-      return `<button type="button" class="chip" data-source="${key}" aria-pressed="${state.filters.sources.has(key)}"
-        title="${failed ? escapeHtml(state.data.sources[key].error) : ''}">
-        ${label}<span class="n">${failed ? '!' : counts[key]}</span></button>`;
-    })
-    .join('');
 }
 
 function renderStatus(visibleCount) {
@@ -502,7 +480,6 @@ function syncControls() {
   els.window.value = String(f.windowDays);
   els.radius.value = String(f.radiusKm);
   els.online.checked = f.online;
-  els.everything.checked = f.everything;
   for (const dropdown of dropdowns) dropdown.sync();
 }
 
@@ -525,27 +502,33 @@ els.category.addEventListener('click', (ev) => {
   render();
 });
 
-els.sources.addEventListener('click', (ev) => {
-  const chip = ev.target.closest('[data-source]');
-  if (!chip) return;
-  const { sources } = state.filters;
-  const key = chip.dataset.source;
-  if (sources.has(key) && sources.size > 1) sources.delete(key);
-  else sources.add(key);
-  persistFilters();
+els.search.addEventListener('input', () => {
+  state.filters.query = els.search.value.trim().toLowerCase();
+  const hasValue = els.search.value !== '';
+  els.search.parentElement.classList.toggle('has-value', hasValue);
+  $('#search-clear').hidden = !hasValue;
   render();
 });
 
-els.search.addEventListener('input', () => {
-  state.filters.query = els.search.value.trim().toLowerCase();
-  render();
+function clearSearch() {
+  els.search.value = '';
+  els.search.dispatchEvent(new Event('input'));
+  els.search.focus();
+}
+
+$('#search-clear').addEventListener('click', clearSearch);
+els.search.addEventListener('keydown', (ev) => {
+  if (ev.key === 'Escape' && els.search.value) {
+    ev.preventDefault();
+    ev.stopPropagation();
+    clearSearch();
+  }
 });
 
 for (const [el, key, parse] of [
   [els.window, 'windowDays', Number],
   [els.radius, 'radiusKm', Number],
   [els.online, 'online', null],
-  [els.everything, 'everything', null],
 ]) {
   el.addEventListener('change', () => {
     state.filters[key] = parse ? parse(el.value) : el.checked;
