@@ -11,7 +11,7 @@ const DEFAULT_DURATION_MS = 2 * 3600e3;
 const GLOBE_ICON =
   '<svg class="icon-globe" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6" /><path d="M2 8h12M8 2c-1.8 1.7-2.7 3.7-2.7 6s.9 4.3 2.7 6c1.8-1.7 2.7-3.7 2.7-6S9.8 3.7 8 2Z" /></svg>';
 const PIN_ICON =
-  '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15Z" /><circle cx="8" cy="6.5" r="1.8" /></svg>';
+  '<svg class="icon-pin" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15Z" /><circle cx="8" cy="6.5" r="1.8" /></svg>';
 
 // localStorage can be unavailable (private mode, blocked storage); the app works without it.
 const store = {
@@ -164,11 +164,11 @@ function cardHtml(e) {
   const end = e.end ? `– ${formatTime(e.end, e.timezone)}` : '';
   const format = e.hybrid ? 'Hybrid' : e.online ? 'Online' : '';
   const meta = [
-    e.organizer,
-    e.venue,
-    e.distanceKm != null ? `${e.distanceKm} km away` : '',
-    format,
-  ].filter(Boolean);
+    { text: e.organizer },
+    { text: e.venue, icon: PIN_ICON },
+    { text: e.distanceKm != null ? `${e.distanceKm} km away` : '' },
+    { text: format, icon: format === 'Online' ? GLOBE_ICON : '' },
+  ].filter((m) => m.text);
   const sources = [{ source: e.source, url: e.url }, ...e.alsoOn];
 
   return `
@@ -176,7 +176,7 @@ function cardHtml(e) {
       <div class="time">${formatTime(e.start, e.timezone)}<small>${end}</small></div>
       <div class="body">
         <h3 class="title"><a href="${escapeHtml(e.url)}" target="_blank" rel="noopener">${escapeHtml(e.title)}</a></h3>
-        <p class="meta">${meta.map((m) => `<span>${m === 'Online' ? GLOBE_ICON : ''}${escapeHtml(m)}</span>`).join('')}</p>
+        <p class="meta">${meta.map((m) => `<span>${m.icon || ''}${escapeHtml(m.text)}</span>`).join('')}</p>
         <div class="tags">
           ${e.categories.map((c) => `<span class="tag ${c}">${c === 'design' ? 'Design' : 'Tech'}</span>`).join('')}
           ${sources
