@@ -819,7 +819,7 @@ a {
   display: grid;
   grid-template-columns: 44px 1fr;
   gap: 12px;
-  padding: 12px 8px;
+  padding: 20px 8px;
 }
 
 .pick-item + .pick-item {
@@ -949,7 +949,7 @@ a {
 
 .pick-remove {
   position: absolute;
-  top: 8px;
+  top: 15px;
   right: 2px;
   width: 28px;
   height: 28px;
