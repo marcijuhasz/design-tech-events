@@ -293,15 +293,18 @@ function pickHtml(e, flash, past = false) {
       <div class="pick-date" aria-hidden="true"><span>${month}</span><strong>${day}</strong></div>
       <div class="pick-body">
         <a class="pick-title" href="${escapeHtml(e.url)}" target="_blank" rel="noopener">${escapeHtml(e.title)}</a>
-        <p class="pick-meta">${weekday} ${formatTime(e.start, e.timezone)}${end}</p>
-        <p class="pick-location">
+        <p class="pick-detail">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6" /><path d="M8 5v3.2l2 1.3" /></svg>
+          <span>${weekday} ${formatTime(e.start, e.timezone)}${end}</span>
+        </p>
+        <p class="pick-detail">
           <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15Z" /><circle cx="8" cy="6.5" r="1.8" /></svg>
           <span>${name ? `<strong>${escapeHtml(name)}</strong>` : ''}${detail ? `<span>${escapeHtml(detail)}</span>` : ''}</span>
         </p>
         <div class="pick-links">
           <a class="link" href="${escapeHtml(e.url)}" target="_blank" rel="noopener">Open event ↗</a>
           ${map ? `<a class="link" href="${escapeHtml(map)}" target="_blank" rel="noopener">Map ↗</a>` : ''}
-          ${past ? '' : '<button type="button" class="link" data-action="calendar" aria-haspopup="menu" aria-expanded="false">Add to calendar ▾</button>'}
+          ${past ? '' : '<button type="button" class="link" data-action="calendar" aria-haspopup="menu" aria-expanded="false">Add to calendar ↗</button>'}
         </div>
       </div>
       <button type="button" class="icon-btn pick-remove" data-action="unpick" aria-label="Remove ${escapeHtml(e.title)} from picks">✕</button>

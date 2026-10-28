@@ -812,12 +812,14 @@ a {
   overscroll-behavior: contain;
 }
 
+/* Two columns: date badge | text. The ✕ sits in the title's top-right corner instead of taking a
+   third column, so every text row (title, time, location, links) gets the full width on one left edge. */
 .pick-item {
+  position: relative;
   display: grid;
-  grid-template-columns: 44px 1fr 28px;
+  grid-template-columns: 44px 1fr;
   gap: 12px;
   padding: 12px 8px;
-  border-radius: 10px;
 }
 
 .pick-item + .pick-item {
@@ -878,6 +880,7 @@ a {
 
 .pick-title {
   display: block;
+  padding-right: 28px;
   font-weight: 600;
   font-size: 14px;
   line-height: 1.3;
@@ -889,22 +892,18 @@ a {
   text-underline-offset: 3px;
 }
 
-.pick-meta {
-  margin: 3px 0 0;
-  font-size: 13px;
-  color: var(--ink-2);
-}
-
-.pick-location {
+/* Time and location rows: icon in a fixed 14px slot, text always starting at the same x. */
+.pick-detail {
   display: flex;
-  gap: 6px;
-  margin: 6px 0 8px;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 6px 0 0;
   font-size: 13px;
-  line-height: 1.4;
+  line-height: 18px;
   color: var(--ink-2);
 }
 
-.pick-location svg {
+.pick-detail svg {
   flex: none;
   width: 14px;
   height: 14px;
@@ -912,9 +911,14 @@ a {
   fill: none;
   stroke: var(--accent);
   stroke-width: 1.6;
+  stroke-linecap: round;
 }
 
-.pick-location strong {
+.pick-detail span {
+  min-width: 0;
+}
+
+.pick-detail strong {
   display: block;
   font-weight: 500;
   color: var(--ink);
@@ -923,7 +927,8 @@ a {
 .pick-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 14px;
+  gap: 4px 16px;
+  margin-top: 16px;
 }
 
 .link {
@@ -943,6 +948,9 @@ a {
 }
 
 .pick-remove {
+  position: absolute;
+  top: 8px;
+  right: 2px;
   width: 28px;
   height: 28px;
   font-size: 13px;
