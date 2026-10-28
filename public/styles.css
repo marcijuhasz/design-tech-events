@@ -267,19 +267,126 @@ a {
   outline: none;
 }
 
-.search:focus,
-select:focus {
+.search:focus {
   border-color: var(--ink-3);
 }
 
-select {
+/* ---------- Branded dropdowns (date range, distance) ---------- */
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   height: 36px;
-  padding: 0 12px;
+  padding: 0 12px 0 16px;
   border-radius: 999px;
   border: 1px solid var(--line);
   background: var(--surface);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.dropdown-btn:hover {
+  border-color: var(--ink-3);
+}
+
+.dropdown-btn:focus-visible,
+.dropdown.open .dropdown-btn {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.dropdown-chevron {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s;
+}
+
+.dropdown.open .dropdown-chevron {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 30;
+  min-width: 100%;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow), 0 12px 32px rgb(0 0 0 / 0.12);
+  animation: dropdown-in 0.14s ease;
+}
+
+.dropdown-menu[hidden] {
+  display: none;
+}
+
+.dropdown-menu.align-right {
+  left: auto;
+  right: 0;
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.dropdown-menu [role='option'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  white-space: nowrap;
   cursor: pointer;
   outline: none;
+}
+
+.dropdown-menu [role='option']:hover,
+.dropdown-menu [role='option']:focus {
+  background: var(--bg);
+}
+
+.dropdown-menu [aria-selected='true'] {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.dropdown-check {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  visibility: hidden;
+}
+
+.dropdown-menu [aria-selected='true'] .dropdown-check {
+  visibility: visible;
 }
 
 .chips {

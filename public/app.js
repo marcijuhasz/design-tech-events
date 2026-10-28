@@ -1,4 +1,5 @@
 import { downloadIcs, googleUrl, outlookUrl } from './calendar.js';
+import { enhanceSelect } from './dropdown.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 
@@ -502,7 +503,10 @@ function syncControls() {
   els.radius.value = String(f.radiusKm);
   els.online.checked = f.online;
   els.everything.checked = f.everything;
+  for (const dropdown of dropdowns) dropdown.sync();
 }
+
+const dropdowns = [enhanceSelect(els.window), enhanceSelect(els.radius)];
 
 els.form.addEventListener('submit', (ev) => {
   ev.preventDefault();
