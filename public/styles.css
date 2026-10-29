@@ -817,7 +817,13 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 24px 8px;
+  padding: 20px 16px 8px 24px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.picks:not(.expanded) .picks-head {
+  padding-bottom: 20px;
 }
 
 .picks-head h2 {
@@ -853,8 +859,35 @@ a {
   }
 }
 
+/* Fold toggle: chevron points down when folded (opens downwards on desktop). */
 .picks-toggle {
-  display: none;
+  display: grid;
+  place-items: center;
+  transition: background 0.15s;
+}
+
+.picks-toggle svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s;
+}
+
+.picks.expanded .picks-toggle svg {
+  transform: rotate(180deg);
+}
+
+.picks-head:hover .picks-toggle {
+  background: var(--line);
+}
+
+.picks-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
 .picks-body {
@@ -862,6 +895,10 @@ a {
   flex-direction: column;
   flex: 1;
   min-height: 0;
+}
+
+.picks:not(.expanded) .picks-body {
+  display: none;
 }
 
 .picks-actions {
@@ -1145,9 +1182,9 @@ a {
     }
   }
 
-  .picks-head {
+  .picks-head,
+  .picks:not(.expanded) .picks-head {
     padding: 12px 12px 12px 20px;
-    cursor: pointer;
   }
 
   .picks-actions {
@@ -1162,17 +1199,13 @@ a {
     font-size: 22px;
   }
 
-  .picks-toggle {
-    display: block;
-    transition: transform 0.2s;
-  }
-
-  .picks.expanded .picks-toggle {
+  /* The sheet opens upwards, so the chevron points up when folded. */
+  .picks-toggle svg {
     transform: rotate(180deg);
   }
 
-  .picks:not(.expanded) .picks-body {
-    display: none;
+  .picks.expanded .picks-toggle svg {
+    transform: none;
   }
 
   .toast {

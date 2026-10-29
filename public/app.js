@@ -261,7 +261,7 @@ function renderPicks(justAddedId = null) {
   els.page.classList.toggle('has-picks', count > 0);
   if (count === 0) {
     closeMenu();
-    setPicksExpanded(false);
+    setPicksExpanded(defaultPicksExpanded());
     return;
   }
 
@@ -333,7 +333,20 @@ function mapUrl(e) {
   return query ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}` : null;
 }
 
-// On narrow screens the pane is a bottom sheet that starts collapsed.
+// The pane can be folded to just its header. On desktop it starts open and remembers your choice;
+// on narrow screens it's a bottom sheet that always starts collapsed.
+const desktopQuery = matchMedia('(min-width: 901px)');
+
+function defaultPicksExpanded() {
+  return desktopQuery.matches ? store.get('picksExpanded', true) : false;
+}
+
+function togglePicksPane() {
+  const expanded = !els.picks.classList.contains('expanded');
+  setPicksExpanded(expanded);
+  if (desktopQuery.matches) store.set('picksExpanded', expanded);
+}
+
 function setPicksExpanded(expanded) {
   els.picks.classList.toggle('expanded', expanded);
   els.picksToggle.setAttribute('aria-expanded', expanded);
@@ -567,7 +580,8 @@ els.picksList.addEventListener('click', (ev) => {
 });
 
 els.picksList.addEventListener('scroll', closeMenu);
-els.picksHead.addEventListener('click', () => setPicksExpanded(!els.picks.classList.contains('expanded')));
+els.picksHead.addEventListener('click', togglePicksPane);
+desktopQuery.addEventListener('change', () => setPicksExpanded(defaultPicksExpanded()));
 $('#copy-links').addEventListener('click', copyAllLinks);
 $('#clear-picks').addEventListener('click', clearPicks);
 
@@ -580,9 +594,10 @@ window.addEventListener('resize', closeMenu);
 document.addEventListener('keydown', (ev) => {
   if (ev.key !== 'Escape') return;
   if (openMenu) closeMenu();
-  else if (els.picks.classList.contains('expanded')) setPicksExpanded(false);
+  else if (!desktopQuery.matches && els.picks.classList.contains('expanded')) setPicksExpanded(false);
 });
 
 syncControls();
+setPicksExpanded(defaultPicksExpanded());
 renderPicks();
 load();
