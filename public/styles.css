@@ -47,7 +47,6 @@ body {
   color: var(--ink);
   font: 15px/1.5 var(--sans);
   -webkit-font-smoothing: antialiased;
-  padding-bottom: 120px;
 }
 
 button,
@@ -737,6 +736,55 @@ a {
   }
 }
 
+/* ---------- Credits ---------- */
+
+.credits {
+  margin-top: 40px;
+  padding: 24px 0 40px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-3);
+}
+
+.credits p {
+  margin: 0;
+}
+
+.credits .made-by {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.credits .made-by a {
+  font-weight: 500;
+}
+
+.credits .heart {
+  color: var(--accent);
+}
+
+.credits a {
+  color: var(--ink-2);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 3px;
+  transition: color 0.15s, text-decoration-color 0.15s;
+}
+
+.credits a:hover {
+  color: var(--ink);
+  text-decoration-color: currentColor;
+}
+
+.credits a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 /* ---------- Picks pane ---------- */
 
 .picks {
@@ -1067,9 +1115,11 @@ a {
 /* ---------- Narrow screens: picks pane becomes a bottom sheet ---------- */
 
 @media (max-width: 900px) {
+  /* Leave room so the collapsed picks sheet never covers the credits. */
   .page.has-picks {
     display: block;
     max-width: 1040px;
+    padding-bottom: 88px;
   }
 
   .picks {
@@ -1135,7 +1185,8 @@ a {
 @media (max-width: 680px) {
   .page,
   .page.has-picks {
-    padding: 0 16px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   .masthead {
